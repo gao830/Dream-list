@@ -20,6 +20,7 @@ class ItemDetailsVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSou
     
     var count = 0
     var stores = [Store]()
+    var itemTypes = [ItemType]()
     var imagePicker: UIImagePickerController!
     
     private var _itemToEdit: Item!
@@ -53,22 +54,36 @@ class ItemDetailsVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSou
         if count == 0 {
             createStores()
         }
-        
+        let count1 = fetchTypeCount()
+        if count1 == 0 {
+            createType()
+        }
         getStores()
+        getType()
         
         if itemToEdit != nil {
             loadItemData()
         }
+       print("\(count1)")
 
     }
+    
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return UIInterfaceOrientationMask.portrait
+    }
+    
+    override var shouldAutorotate: Bool {
+        return false
+    }
+    
 
     func createStores() {
         let store1 = Store(context: context)
         store1.name = "Best Buy"
         let store2 = Store(context: context)
-        store2.name = "Tesla Dealership"
+        store2.name = "Tesla Dealer"
         let store3 = Store(context: context)
-        store3.name = "Frys Electronics"
+        store3.name = "Frys"
         let store4 = Store(context: context)
         store4.name = "Target"
         let store5 = Store(context: context)
@@ -77,6 +92,31 @@ class ItemDetailsVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSou
         store6.name = "Walmart"
         ad.saveContext()
     }
+    
+    func createType() {
+        
+        
+        
+        
+        let type1 = ItemType(context: context)
+        type1.type = "Electronics"
+        ad.saveContext()
+        let type2 = ItemType(context: context)
+        type2.type = "Vehicles"
+        ad.saveContext()
+        let type3 = ItemType(context: context)
+        type3.type = "Video Games"
+        ad.saveContext()
+        let type4 = ItemType(context: context)
+        type4.type = "Software"
+        ad.saveContext()
+        let type5 = ItemType(context: context)
+        type5.type = "Other"
+        ad.saveContext()
+    }
+
+    
+    
     
     func fetchStoreCount() -> Int {
         
@@ -93,18 +133,46 @@ class ItemDetailsVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSou
         
     }
     
+    func fetchTypeCount() -> Int {
+        
+        let fetchRequest: NSFetchRequest<ItemType> = ItemType.fetchRequest()
+        
+        do {
+            let count = try context.count(for: fetchRequest)
+            //            print("Current Store Data Count : \(count)")
+            return count
+        } catch let err as NSError {
+            print(err.description)
+            return 0
+        }
+        
+    }
+
+    
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        let store = stores[row]
-        return store.name
+        if component == 0 {
+            let store = stores[row]
+            return store.name
+        } else {
+            let type = itemTypes[row]
+//            print("\(type.type!)")
+            return type.type
+        }
+    
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return stores.count
+        if component == 0 {
+            return stores.count
+        }
+        else {
+            return itemTypes.count
+        }
     }
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         
-        return 1
+        return 2
     }
 
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
@@ -115,6 +183,17 @@ class ItemDetailsVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSou
         let fetchRequest: NSFetchRequest<Store> = Store.fetchRequest()
         do {
             self.stores = try context.fetch(fetchRequest)
+            self.storePicker.reloadAllComponents()
+        } catch {
+            //
+        }
+        
+    }
+    
+    func getType() {
+        let fetchRequest: NSFetchRequest<ItemType> = ItemType.fetchRequest()
+        do {
+            self.itemTypes = try context.fetch(fetchRequest)
             self.storePicker.reloadAllComponents()
         } catch {
             //
@@ -147,6 +226,7 @@ class ItemDetailsVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSou
         }
         
         item.toStore = stores[storePicker.selectedRow(inComponent: 0)]
+        item.toItemType = itemTypes[storePicker.selectedRow(inComponent: 1)]
         
         ad.saveContext()
         
@@ -175,6 +255,22 @@ class ItemDetailsVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSou
                     
                 } while (index < stores.count)
             }
+            
+            if let type = item.toItemType {
+                var index = 0
+                repeat {
+                    
+                    let t = itemTypes[index]
+                    if t.type == type.type {
+                        storePicker.selectRow(index, inComponent: 1, animated: false)
+                        break
+                    }
+                    index += 1
+                    
+                } while (index < itemTypes.count)
+            }
+
+            
             
         }
     }
