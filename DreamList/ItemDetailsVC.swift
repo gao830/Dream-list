@@ -267,6 +267,7 @@ class ItemDetailsVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSou
                     }
                     index += 1
                     
+                    
                 } while (index < itemTypes.count)
             }
 
