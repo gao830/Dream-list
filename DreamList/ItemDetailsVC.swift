@@ -255,7 +255,7 @@ class ItemDetailsVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSou
                     
                 } while (index < stores.count)
             }
-//            dsafa
+//            dsafa ggg
             if let type = item.toItemType {
                 var index = 0
                 repeat {
