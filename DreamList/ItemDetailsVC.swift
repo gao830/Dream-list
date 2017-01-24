@@ -255,7 +255,7 @@ class ItemDetailsVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSou
                     
                 } while (index < stores.count)
             }
-            
+//            dsafa
             if let type = item.toItemType {
                 var index = 0
                 repeat {
@@ -266,7 +266,6 @@ class ItemDetailsVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSou
                         break
                     }
                     index += 1
-                    
                     
                 } while (index < itemTypes.count)
             }
