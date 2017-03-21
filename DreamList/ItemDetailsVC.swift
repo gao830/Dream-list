@@ -11,6 +11,7 @@ import CoreData
 
 class ItemDetailsVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource,UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
+    
     @IBOutlet weak var storePicker: UIPickerView!
     @IBOutlet weak var titleField: CustomTextField!
     @IBOutlet weak var priceField: CustomTextField!
@@ -21,7 +22,7 @@ class ItemDetailsVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSou
     var count = 0
     var stores = [Store]()
     var itemTypes = [ItemType]()
-    var imagePicker: UIImagePickerController!
+    var imagePicker = UIImagePickerController()
     
     private var _itemToEdit: Item!
     var itemToEdit: Item! {
@@ -47,7 +48,7 @@ class ItemDetailsVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSou
         storePicker.delegate = self
         storePicker.dataSource = self
         
-        imagePicker = UIImagePickerController()
+//        imagePicker = UIImagePickerController()
         imagePicker.delegate = self
         
         let count = fetchStoreCount()
@@ -94,9 +95,6 @@ class ItemDetailsVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSou
     }
     
     func createType() {
-        
-        
-        
         
         let type1 = ItemType(context: context)
         type1.type = "Electronics"
